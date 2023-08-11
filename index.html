@@ -1,0 +1,66 @@
+<!DOCTYPE html> <!-- Defines the document to be HTML5 -->
+<html lang="en"> <!-- Sets the language of the document to English -->
+<head>
+    <meta charset="UTF-8"> <!-- Specifies the character encoding for the HTML document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Makes the webpage responsive -->
+    <title>EndlessEats</title> <!-- Sets the title of the webpage -->
+</head>
+<body>
+    <h1>Welcome to EndlessEats!</h1> <!-- Main heading of the page -->
+    <form id="recipe-form"> <!-- Starts the form -->
+        <label for="ingredients">Ingredients:</label> <!-- Label for the ingredients field -->
+        <input type="text" id="ingredients" name="ingredients" placeholder="eggs, milk, flour"><br><br> <!-- Text input for ingredients -->
+        <label for="time">Time (in minutes):</label> <!-- Label for the time field -->
+        <input type="number" id="time" name="time" min="5" max="180"><br><br> <!-- Number input for time -->
+        <label for="diet">Diet:</label> <!-- Label for the diet field -->
+        <select id="diet" name="diet"> <!-- Dropdown for diet -->
+            <option value="vegetarian">Vegetarian</option> <!-- Option for vegetarian -->
+            <option value="vegan">Vegan</option> <!-- Option for vegan -->
+            <option value="none">None</option> <!-- Option for no dietary restrictions -->
+        </select><br><br>
+        <label for="allergies">Allergies:</label> <!-- Label for the allergies field -->
+        <input type="text" id="allergies" name="allergies" placeholder="gluten, nuts"><br><br> <!-- Text input for allergies -->
+        <input type="submit" value="Generate Recipes"> <!-- Submit button for the form -->
+    </form>
+    <div id="results"></div> <!-- Div to display the results -->
+
+    <!-- JavaScript code -->
+    <script>
+        // Add an event listener for form submission
+        document.getElementById('recipe-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting normally
+            
+            // Get user input from the form
+            var ingredients = document.getElementById('ingredients').value.split(', ');
+            var time = document.getElementById('time').value;
+            var diet = document.getElementById('diet').value;
+            var allergies = document.getElementById('allergies').value.split(', ');
+
+            // Construct the payload object
+            // ...
+            var payload = {
+            ingredients: ingredients.join(', '), // Join the ingredients array into a string
+            time: time,
+            diet: diet,
+            allergies: allergies.join(', ') // Join the allergies array into a string
+            };
+// ...
+
+
+            // Send POST request to the server
+            fetch('/generate', {
+                method: 'POST', // Specify the method
+                headers: {
+                    'Content-Type': 'application/json', // Set the content type
+                },
+                body: JSON.stringify(payload) // Convert the payload object to JSON
+            })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                // Display the received data in the 'results' div
+                document.getElementById('results').innerHTML = data.join('<br>');
+            });
+        });
+    </script>
+</body>
+</html>
